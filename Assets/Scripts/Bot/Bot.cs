@@ -13,8 +13,6 @@ public class Bot : MonoBehaviour
     private Coroutine _destinationUpdating;
     private bool _isOnBase;
 
-    private event Action ArrivedBase;
-
     public bool IsHoldingResource => _resourceHolder.IsHolding;
     public Resource HoldedResource => _resourceHolder.CurrentResource;
     public bool IsHaveTarget => CurrentTarget != null;
@@ -30,7 +28,6 @@ public class Bot : MonoBehaviour
 
     private void OnEnable()
     {
-        ArrivedBase += DoActionsOnBase;
         _resourceHolder.DetectedResource += TryGrapTarget;
         _resourceHolder.DroppedResource += StopMoving;
         _destinationUpdating = StartCoroutine(UpdateDestinationInLoop(1));
@@ -38,7 +35,6 @@ public class Bot : MonoBehaviour
 
     private void OnDisable()
     {
-        ArrivedBase -= DoActionsOnBase;
         _resourceHolder.DetectedResource -= TryGrapTarget;
         _resourceHolder.DroppedResource -= StopMoving;
         StopCoroutine(_destinationUpdating);
@@ -51,7 +47,7 @@ public class Bot : MonoBehaviour
             if (@base == MainBase)
             {
                 _isOnBase = true;
-                ArrivedBase?.Invoke();
+                DoActionsOnBase();
             }
         }
 
@@ -91,7 +87,7 @@ public class Bot : MonoBehaviour
 
         if (target == MainBase.transform && _isOnBase)
         {
-            ArrivedBase?.Invoke();
+            DoActionsOnBase();
         }
     }
 
