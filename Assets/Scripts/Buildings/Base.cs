@@ -189,7 +189,7 @@ public class Base : Building
 
     private void InvokeBaseBuilded()
     {
-        BaseBuilded.Invoke();
+        BaseBuilded?.Invoke();
     } 
 
     private void RemoveReservedTargets()
